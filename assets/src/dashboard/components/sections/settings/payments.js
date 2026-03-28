@@ -1,7 +1,6 @@
 import stripeConnect from '@dashboard-addons/payments/stripe-connect';
 import paypal from '@dashboard-addons/payments/paypal';
 import stripe from '@dashboard-addons/payments/stripe';
-import razorpay from '@dashboard-addons/payments/razorpay';
 import woocommerce from '@dashboard-addons/payments/woocommerce';
 import addon_feature from '@dashboard-partials/addon-feature';
 
@@ -22,6 +21,31 @@ export default {
               </div>
             </div>
             <span class="label for-switcher" v-html=" settings_object.payments.locally.enabled ? translations.enabled : translations.disabled"></span>
+          </div>
+        </div>
+
+        <div class="setting-row no-border pb-10 pt-30">
+          <div class="form-group small no-margin">
+            <span class="label">Razorpay</span>
+          </div>
+          <div class="form-group small no-margin">
+            <div class="switcher">
+              <div class="bookit-switch">
+                <input type="checkbox" v-model="settings_object.payments.razorpay.enabled">
+                <label></label>
+              </div>
+            </div>
+            <span class="label for-switcher" v-html=" settings_object.payments.razorpay.enabled ? translations.enabled : translations.disabled"></span>
+          </div>
+        </div>
+        <div v-if="settings_object.payments.razorpay.enabled" class="setting-row pt-10">
+          <div class="form-group small">
+            <label>{{ translations.razorpay_key_id }}</label>
+            <input type="text" v-model="settings_object.payments.razorpay.key_id">
+          </div>
+          <div class="form-group small">
+            <label>{{ translations.razorpay_key_secret }}</label>
+            <input type="text" v-model="settings_object.payments.razorpay.key_secret">
           </div>
         </div>
 
@@ -73,7 +97,6 @@ export default {
 		stripeConnect,
 		paypal,
 		stripe,
-		razorpay,
 		woocommerce,
 		addon_feature,
 	},

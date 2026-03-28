@@ -8,7 +8,7 @@ import temp_pro from '@dashboard-addons/payments/temp-pro';
 
 export default {
 	template: `
-      <div class="payments-tabs">
+	      <div v-if="isPaymentsReady" class="payments-tabs">
         <div class="setting-row pt-10">
           <div class="form-group small no-margin">
             <span class="label">{{ translations.pay_locally }}</span>
@@ -92,6 +92,7 @@ export default {
           <!-- IF ADDON INSALLED BUT NO LICENSE END-->
         </div>
       </div>
+      <div v-else class="payments-tabs"></div>
 	`,
 	components: {
 		stripeConnect,
@@ -138,25 +139,44 @@ export default {
 		errors() {
 			return this.$store.getters.getErrors;
 		},
+		isPaymentsReady() {
+			return !!( this.settings_object && this.settings_object.payments );
+		}
 	},
 	created() {
-		if ( !this.settings_object.payments.stripeConnect ) {
-			this.$set( this.settings_object.payments, 'stripeConnect', {
-				enabled: false,
-				publish_key: '',
-				secret_key: ''
-			} );
-		}
-
-		if ( !this.settings_object.payments.razorpay ) {
-			this.$set( this.settings_object.payments, 'razorpay', {
-				enabled: false,
-				key_id: '',
-				key_secret: ''
-			} );
+		this.ensurePaymentDefaults();
+	},
+	watch: {
+		settings_object: {
+			deep: true,
+			immediate: true,
+			handler() {
+				this.ensurePaymentDefaults();
+			}
 		}
 	},
 	methods: {
+		ensurePaymentDefaults() {
+			if ( !this.settings_object || !this.settings_object.payments ) {
+				return;
+			}
+
+			if ( !this.settings_object.payments.stripeConnect ) {
+				this.$set( this.settings_object.payments, 'stripeConnect', {
+					enabled: false,
+					publish_key: '',
+					secret_key: ''
+				} );
+			}
+
+			if ( !this.settings_object.payments.razorpay ) {
+				this.$set( this.settings_object.payments, 'razorpay', {
+					enabled: false,
+					key_id: '',
+					key_secret: ''
+				} );
+			}
+		},
 		showActivationLink() {
 			return ( this.proAddons[ 0 ].data.installed && !this.proAddons[ 0 ].data.isCanUse );
 		},
@@ -172,5 +192,5 @@ export default {
 		findPayment( paymentName ) {
 			return this.proAddons[ 0 ].data.settings.payments.find( payment => payment.name === paymentName );
 		},
-	}
+	},
 }

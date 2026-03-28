@@ -18,7 +18,7 @@ export default {
           
           <span class="selected-icon" v-if="key == appointment.payment_method"></span>
 
-          <span class="is-pro" v-if="['stripe', 'woocommerce'].includes(key)">
+          <span class="is-pro" v-if="['stripe', 'razorpay', 'woocommerce'].includes(key)">
               <span class="pro-tooltip">
                  pro
                  <span  class="pro-tooltiptext">Feature Available <br> in Pro Version</span>
@@ -62,7 +62,7 @@ export default {
           return acc;
         }
 
-        if (key !== 'woocommerce') {
+        if ( !['woocommerce', 'razorpay'].includes( key ) ) {
           acc[key] = enabled_payments[key];
           return acc;
         }

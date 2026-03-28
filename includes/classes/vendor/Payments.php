@@ -133,6 +133,23 @@ class Payments {
 	}
 
 	/**
+	 * Razorpay
+	 */
+	public function razorpay() {
+		$className = $this->className;
+		$razorpay  = new $className(
+			$this->appointment['price'],
+			$this->appointment['id'],
+			$this->service->title,
+			$this->service->id,
+			$this->appointment['customer_email'],
+			''
+		);
+
+		$this->redirect_url = $razorpay->generate_payment_url();
+	}
+
+	/**
 	 * WooCommerce
 	 */
 	public function woocommerce() {

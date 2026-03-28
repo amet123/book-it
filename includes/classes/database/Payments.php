@@ -13,7 +13,7 @@ class Payments extends DatabaseModel {
 	public static $completeStatus = 'complete';
 	public static $rejectedStatus = 'rejected';
 	public static $statusList     = array( 'pending', 'cancelled', 'rejected', 'complete' );
-	public static $typeList       = array( 'locally', 'stripeConnect', 'paypal', 'stripe', 'woocommerce', 'free' );
+	public static $typeList       = array( 'locally', 'stripeConnect', 'paypal', 'stripe', 'razorpay', 'woocommerce', 'free' );
 
 	/**
 	 * Create Table
@@ -29,7 +29,7 @@ class Payments extends DatabaseModel {
 			`appointment_id` INT UNSIGNED NOT NULL,
 			`coupon_id` INT UNSIGNED DEFAULT NULL,
 			`discount_id` INT UNSIGNED DEFAULT NULL,
-			`type` ENUM('locally', 'stripeConnect', 'paypal', 'stripe', 'woocommerce', 'free') NOT NULL DEFAULT 'locally',
+			`type` ENUM('locally', 'stripeConnect', 'paypal', 'stripe', 'razorpay', 'woocommerce', 'free') NOT NULL DEFAULT 'locally',
 			`status` ENUM('pending', 'cancelled', 'rejected', 'complete') NOT NULL DEFAULT 'pending',
 			`total`     DECIMAL(10,2) NOT NULL DEFAULT 0.00,
             `tax`       DECIMAL(10,2) DEFAULT 0.00,
@@ -72,7 +72,7 @@ class Payments extends DatabaseModel {
 		global $wpdb;
 
 		$sql = sprintf(
-			"ALTER TABLE `%s` MODIFY COLUMN `type` ENUM('locally', 'stripeConnect', 'paypal', 'stripe', 'woocommerce', 'free') NOT NULL DEFAULT 'locally';",
+			"ALTER TABLE `%s` MODIFY COLUMN `type` ENUM('locally', 'stripeConnect', 'paypal', 'stripe', 'razorpay', 'woocommerce', 'free') NOT NULL DEFAULT 'locally';",
 			esc_sql( self::_table() )
 		);
 		$wpdb->query( $sql );

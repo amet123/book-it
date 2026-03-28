@@ -1,6 +1,7 @@
 import stripeConnect from '@dashboard-addons/payments/stripe-connect';
 import paypal from '@dashboard-addons/payments/paypal';
 import stripe from '@dashboard-addons/payments/stripe';
+import razorpay from '@dashboard-addons/payments/razorpay';
 import woocommerce from '@dashboard-addons/payments/woocommerce';
 import addon_feature from '@dashboard-partials/addon-feature';
 
@@ -72,6 +73,7 @@ export default {
 		stripeConnect,
 		paypal,
 		stripe,
+		razorpay,
 		woocommerce,
 		addon_feature,
 	},
@@ -120,6 +122,14 @@ export default {
 				enabled: false,
 				publish_key: '',
 				secret_key: ''
+			} );
+		}
+
+		if ( !this.settings_object.payments.razorpay ) {
+			this.$set( this.settings_object.payments, 'razorpay', {
+				enabled: false,
+				key_id: '',
+				key_secret: ''
 			} );
 		}
 	},

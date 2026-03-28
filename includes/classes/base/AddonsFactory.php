@@ -89,6 +89,11 @@ class FakeAddon extends Addon {
 					'settings'       => [],
 				],
 				[
+					'name'           => 'razorpay',
+					'formatted_name' => esc_html_x( 'Razorpay', 'Razorpay payment singular name.', 'bookit' ),
+					'settings'       => [],
+				],
+				[
 					'name'           => 'woocommerce',
 					'formatted_name' => esc_html_x( 'WooCommerce', 'WooCommerce payment singular name.', 'bookit' ),
 					'settings'       => [],

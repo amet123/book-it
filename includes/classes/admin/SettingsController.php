@@ -208,6 +208,11 @@ class SettingsController extends DashboardController {
 					'stripeConnect' => [ 'enabled' => false ],
 					'paypal'        => [ 'enabled' => false ],
 					'stripe'        => [ 'enabled' => false ],
+					'razorpay'      => [
+						'enabled'    => false,
+						'key_id'     => '',
+						'key_secret' => '',
+					],
 					'woocommerce'   => [ 'enabled' => false ],
 				],
 				'emails'                            => MailTemplateHelper::getTemplates(),

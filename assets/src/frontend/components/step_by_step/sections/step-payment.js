@@ -55,9 +55,13 @@ export default {
       }
     },
     payment_methods() {
-      let enabled_payments = { ...this.settings.payments };
+      const payments = ( this.settings && this.settings.payments ) ? this.settings.payments : {};
+      let enabled_payments = { ...payments };
 
       return Object.keys(enabled_payments).reduce((acc, key) => {
+        if (!enabled_payments[key] || typeof enabled_payments[key] !== 'object') {
+          return acc;
+        }
         if (!enabled_payments[key].enabled) {
           return acc;
         }

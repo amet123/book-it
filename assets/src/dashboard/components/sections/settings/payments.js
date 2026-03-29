@@ -54,20 +54,20 @@ export default {
             v-for="paymentName in ['stripeConnect', 'paypal']"
             :key="paymentName"
             :is="paymentName"
-            :addon="proAddons[0].data"
+            :addon="paymentAddon"
             :payment="findPayment(paymentName)"
             :settings_object="settings_object"
             :gateways="gateways">
         </component>
 
         <!-- Load bookit payments addon data -->
-        <div :class="{'no-addon':!proAddons[0].data.isCanUse }">
+        <div :class="{'no-addon':!paymentAddon.isCanUse }">
           <component
-              v-for="payment in proAddons[0].data.settings.payments"
+              v-for="payment in addonPayments"
               v-if="payment.name !== 'stripeConnect' && payment.name !== 'paypal'"
               :key="payment.name"
               :is="payment.name"
-              :addon="proAddons[0].data"
+              :addon="paymentAddon"
               :payment="payment"
               :settings_object="settings_object"
               :gateways="gateways">
@@ -75,7 +75,7 @@ export default {
 
           <!-- IF ADDON NOT INSTALLED -->
           <div class='' v-if="showNotInstalledAddon()">
-            <addon_feature :freemius="proAddons[0].freemius" :addon="proAddons[0]" addonSlug="payments" :addonLink="proAddons[0].data.link"></addon_feature>
+            <addon_feature :freemius="paymentAddonRaw.freemius" :addon="paymentAddonRaw" addonSlug="payments" :addonLink="paymentAddon.link"></addon_feature>
           </div>
           <!-- IF ADDON NOT INSTALLED END -->
           
@@ -83,10 +83,10 @@ export default {
           <div class='' v-if="showActivationLink()">
             <div class="addon-feature activation">
             <span class="addon-icon">
-              <i :class="proAddons[0].name"></i>
+              <i :class="paymentAddonRaw.name"></i>
             </span>
-              <h2 class="title">{{ proAddons[ 0 ].data.title }}</h2>
-              <p class="activation-link" v-html="proAddons[0].data.activationLink"></p>
+              <h2 class="title">{{ paymentAddon.title }}</h2>
+              <p class="activation-link" v-html="paymentAddon.activationLink"></p>
             </div>
           </div>
           <!-- IF ADDON INSALLED BUT NO LICENSE END-->
@@ -141,6 +141,36 @@ export default {
 		},
 		isPaymentsReady() {
 			return !!( this.settings_object && this.settings_object.payments );
+		},
+		paymentAddonRaw() {
+			if ( Array.isArray( this.proAddons ) && this.proAddons.length ) {
+				return this.proAddons[0];
+			}
+
+			return {
+				name: '',
+				freemius: {},
+				data: {
+					title: '',
+					link: '',
+					installed: false,
+					isCanUse: false,
+					activationLink: '',
+					settings: {
+						payments: []
+					}
+				}
+			};
+		},
+		paymentAddon() {
+			return this.paymentAddonRaw.data || {};
+		},
+		addonPayments() {
+			if ( !this.paymentAddon.settings || !Array.isArray( this.paymentAddon.settings.payments ) ) {
+				return [];
+			}
+
+			return this.paymentAddon.settings.payments;
 		}
 	},
 	created() {
@@ -178,10 +208,10 @@ export default {
 			}
 		},
 		showActivationLink() {
-			return ( this.proAddons[ 0 ].data.installed && !this.proAddons[ 0 ].data.isCanUse );
+			return ( this.paymentAddon.installed && !this.paymentAddon.isCanUse );
 		},
 		showNotInstalledAddon() {
-			return !this.proAddons[ 0 ].data.installed && !this.pro_installed;
+			return !this.paymentAddon.installed && !this.pro_installed;
 		},
 		hasStripeConnect( payments ) {
 			return payments.some( payment => payment.name === 'stripeConnect' );
@@ -190,7 +220,7 @@ export default {
 			return payments.some( payment => payment.name === 'paypal' );
 		},
 		findPayment( paymentName ) {
-			return this.proAddons[ 0 ].data.settings.payments.find( payment => payment.name === paymentName );
+			return this.addonPayments.find( payment => payment.name === paymentName );
 		},
 	},
 }

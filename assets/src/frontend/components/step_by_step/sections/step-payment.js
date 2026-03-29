@@ -18,7 +18,7 @@ export default {
           
           <span class="selected-icon" v-if="key == appointment.payment_method"></span>
 
-          <span class="is-pro" v-if="['stripe', 'woocommerce'].includes(key)">
+          <span class="is-pro" v-if="['stripe', 'razorpay', 'woocommerce'].includes(key)">
               <span class="pro-tooltip">
                  pro
                  <span  class="pro-tooltiptext">Feature Available <br> in Pro Version</span>
@@ -55,15 +55,23 @@ export default {
       }
     },
     payment_methods() {
-      let enabled_payments = { ...this.settings.payments };
+      const payments = ( this.settings && this.settings.payments ) ? this.settings.payments : {};
+      let enabled_payments = { ...payments };
 
       return Object.keys(enabled_payments).reduce((acc, key) => {
+        if (!enabled_payments[key] || typeof enabled_payments[key] !== 'object') {
+          return acc;
+        }
         if (!enabled_payments[key].enabled) {
           return acc;
         }
 
-        if (key !== 'woocommerce') {
+        if ( !['woocommerce', 'razorpay'].includes( key ) ) {
           acc[key] = enabled_payments[key];
+          return acc;
+        }
+
+        if ( key === 'woocommerce' && this.settings.woocommerce_enabled === 'false' ) {
           return acc;
         }
 

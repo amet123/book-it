@@ -54,6 +54,7 @@ require_once( BOOKIT_CLASSES_PATH . '/database/Coupons.php' );
 require_once( BOOKIT_CLASSES_PATH . '/database/Discounts.php' );
 require_once( BOOKIT_CLASSES_PATH . '/database/Payments.php' );
 require_once( BOOKIT_CLASSES_PATH . '/payments/PayPal.php' );
+require_once( BOOKIT_CLASSES_PATH . '/payments/Razorpay.php' );
 
 /* Autoload Files */
 require_once( BOOKIT_INCLUDES_PATH . 'helpers.php' );

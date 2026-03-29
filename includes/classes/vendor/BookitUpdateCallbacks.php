@@ -286,4 +286,36 @@ abstract class BookitUpdateCallbacks {
 	public static function update_payment_methods_enum() {
 		Payments::update_payment_methods_enum();
 	}
+
+	/**
+	 * Ensure Razorpay settings exist for existing installations.
+	 *
+	 * @since 2.5.5
+	 */
+	public static function add_razorpay_settings() {
+		$settings = SettingsController::get_settings();
+
+		if ( empty( $settings['payments'] ) || ! is_array( $settings['payments'] ) ) {
+			$settings['payments'] = array();
+		}
+
+		if ( ! isset( $settings['payments']['razorpay'] ) || ! is_array( $settings['payments']['razorpay'] ) ) {
+			$settings['payments']['razorpay'] = array(
+				'enabled'    => false,
+				'key_id'     => '',
+				'key_secret' => '',
+			);
+		} else {
+			$settings['payments']['razorpay'] = wp_parse_args(
+				$settings['payments']['razorpay'],
+				array(
+					'enabled'    => false,
+					'key_id'     => '',
+					'key_secret' => '',
+				)
+			);
+		}
+
+		SettingsController::save_settings( $settings );
+	}
 }

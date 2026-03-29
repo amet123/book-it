@@ -19,6 +19,11 @@ add_action(
 			$paypal = new \Bookit\Classes\Payments\PayPal();
 			$paypal->check_payment( $_REQUEST );
 		}
+
+		if ( ! empty( $_GET['stm_bookit_check_razorpay'] ) ) {
+			$razorpay = new \Bookit\Classes\Payments\Razorpay();
+			$razorpay->check_payment( $_REQUEST );
+		}
 	}
 );
 

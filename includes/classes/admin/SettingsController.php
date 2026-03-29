@@ -208,6 +208,11 @@ class SettingsController extends DashboardController {
 					'stripeConnect' => [ 'enabled' => false ],
 					'paypal'        => [ 'enabled' => false ],
 					'stripe'        => [ 'enabled' => false ],
+					'razorpay'      => [
+						'enabled'    => false,
+						'key_id'     => '',
+						'key_secret' => '',
+					],
 					'woocommerce'   => [ 'enabled' => false ],
 				],
 				'emails'                            => MailTemplateHelper::getTemplates(),
@@ -228,6 +233,17 @@ class SettingsController extends DashboardController {
 	 */
 	public static function get_settings() {
 		$settings = get_option( self::$settings_key, [] );
+
+		if ( ! empty( $settings['payments'] ) && is_array( $settings['payments'] ) ) {
+			$settings['payments']['razorpay'] = wp_parse_args(
+				$settings['payments']['razorpay'] ?? [],
+				[
+					'enabled'    => false,
+					'key_id'     => '',
+					'key_secret' => '',
+				]
+			);
+		}
 
 		/**
 		 * Filter the BookIt settings.

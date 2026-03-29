@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'BOOKIT_VERSION', '2.5.4' );
-define( 'BOOKIT_DB_VERSION', '2.2.5' );
+define( 'BOOKIT_DB_VERSION', '2.5.5' );
 define( 'BOOKIT_FILE', __FILE__ );
 define( 'BOOKIT_PATH', dirname( BOOKIT_FILE ) );
 define( 'BOOKIT_INCLUDES_PATH', BOOKIT_PATH . '/includes/' );

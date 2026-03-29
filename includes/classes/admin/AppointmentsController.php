@@ -74,6 +74,7 @@ class AppointmentsController extends DashboardController {
 			'stripeConnect' => esc_html__( 'stripeConnect', 'bookit' ),
 			'paypal'        => esc_html__( 'paypal', 'bookit' ),
 			'stripe'        => esc_html__( 'stripe', 'bookit' ),
+			'razorpay'      => esc_html__( 'razorpay', 'bookit' ),
 			'woocommerce'   => esc_html__( 'woocommerce', 'bookit' ),
 			'free'          => esc_html__( 'free', 'bookit' ),
 		);

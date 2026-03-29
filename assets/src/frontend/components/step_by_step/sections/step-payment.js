@@ -71,6 +71,10 @@ export default {
           return acc;
         }
 
+        if ( key === 'woocommerce' && this.settings.woocommerce_enabled === 'false' ) {
+          return acc;
+        }
+
         if (this.settings.pro_active) {
           acc[key] = enabled_payments[key];
         }

@@ -21,7 +21,11 @@ class Payments {
 		$this->service        = Services::get( 'id', $this->appointment['service_id'] );
 		$this->set_class_name();
 
-		$this->{$this->payment_method}();
+		if ( method_exists( $this, $this->payment_method ) ) {
+			$this->{$this->payment_method}();
+		} else {
+			$this->locally();
+		}
 	}
 
 	/**
@@ -90,6 +94,13 @@ class Payments {
 	 */
 	public function stripeConnect() {
 		$className = $this->className;
+
+		if ( empty( $className ) || ! class_exists( $className ) ) {
+			$this->redirect_url = '';
+
+			return;
+		}
+
 		$stripe    = new $className();
 		$stripe->check_payment(
 			$this->token,
@@ -105,6 +116,13 @@ class Payments {
 	 */
 	public function paypal() {
 		$className = $this->className;
+
+		if ( empty( $className ) || ! class_exists( $className ) ) {
+			$this->redirect_url = '';
+
+			return;
+		}
+
 		$paypal    = new $className(
 			$this->appointment['price'],
 			$this->appointment['id'],
@@ -122,6 +140,13 @@ class Payments {
 	 */
 	public function stripe() {
 		$className = $this->className;
+
+		if ( empty( $className ) || ! class_exists( $className ) ) {
+			$this->redirect_url = '';
+
+			return;
+		}
+
 		$stripe    = new $className(
 			$this->token,
 			$this->appointment['price'],
@@ -137,6 +162,13 @@ class Payments {
 	 */
 	public function razorpay() {
 		$className = $this->className;
+
+		if ( empty( $className ) || ! class_exists( $className ) ) {
+			$this->redirect_url = '';
+
+			return;
+		}
+
 		$razorpay  = new $className(
 			$this->appointment['price'],
 			$this->appointment['id'],
@@ -154,6 +186,13 @@ class Payments {
 	 */
 	public function woocommerce() {
 		$className = $this->className;
+
+		if ( ! class_exists( 'WooCommerce' ) || empty( $className ) || ! class_exists( $className ) ) {
+			$this->redirect_url = '';
+
+			return;
+		}
+
 		$paypal    = new $className(
 			$this->appointment['price'],
 			$this->appointment['id'],
